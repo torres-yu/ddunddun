@@ -1,11 +1,22 @@
 
 
 spring:
+
   datasource:
     username: dservice
     password: tjqltm!!@
     url: jdbc:mysql://10.202.19.216:3306/tools_bsc_job_kakaom?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      data-source-properties:
+        useUnicode: true
+        characterEncoding: UTF-8
+    tomcat:
+      time-between-eviction-runs-millis: 60000
+      test-while-idle: true
+      validation-query: SELECT 1
+
+  #jpa
   jpa:
     properties:
       hibernate:
@@ -15,6 +26,10 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+    show-sql: true
+
+  #jackson
   jackson:
     mapper:
       default-view-inclusion: true

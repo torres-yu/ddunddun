@@ -19,10 +19,8 @@ public class HelloController {
     @GetMapping("")
     public Response hello() {
 
-        EmployeeVo employeeVo = helloService.getEmployee();
-
         return new ResponseBuilder()
-                .add("emp327", employeeVo)
+                .add("emp327", helloService.getEmployee())
                 .build();
     }
 }
