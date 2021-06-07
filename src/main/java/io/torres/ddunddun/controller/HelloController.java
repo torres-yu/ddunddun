@@ -1,7 +1,6 @@
 package io.torres.ddunddun.controller;
 
 import io.torres.ddunddun.service.HelloService;
-import io.torres.ddunddun.vo.response.EmployeeVo;
 import io.torres.ddunddun.vo.response.Response;
 import io.torres.ddunddun.vo.response.ResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;

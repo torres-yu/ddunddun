@@ -1,4 +1,4 @@
-package io.torres.ddunddun.vo.response;
+package io.torres.ddunddun.vo;
 
 import io.torres.ddunddun.code.YesOrNoEnum;
 import lombok.Getter;
