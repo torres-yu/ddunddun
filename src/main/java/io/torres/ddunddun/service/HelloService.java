@@ -28,23 +28,10 @@ public class HelloService {
     @Transactional
     public EmployeeVo getEmployee() {
 
-        Employee employee = employeeRepository.findById(327L).get();
+        Employee employee = employeeRepository.findById(1L).get();
         EmployeeVo employeeVo = new EmployeeVo();
         voEntityConverter.entityToVoConvert(employee, employeeVo);
 
         return employeeVo;
     }
-
-    //jwt토큰 생성, redis에 저장
-    public void getToken() {
-
-        Employee employee = employeeRepository.findById(327L).get();
-        User user = new User();
-        voEntityConverter.entityToVoConvert(employee, user);
-
-        String accessToken = tokenProvider.issueToken(user, "Access");
-        String refreshToken = tokenProvider.issueToken(user, "refresh");
-        refreshTokenService.save(user,refreshToken);
-    }
-
 }

@@ -19,7 +19,7 @@ public class HelloController {
     public Response hello() {
 
         return new ResponseBuilder()
-                .add("emp327", helloService.getEmployee())
+                .add("data", helloService.getEmployee())
                 .build();
     }
 }

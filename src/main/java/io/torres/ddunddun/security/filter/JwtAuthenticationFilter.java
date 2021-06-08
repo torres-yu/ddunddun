@@ -27,8 +27,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 			try {
-				Authentication authentication = service.getAuthentication(request);
-				SecurityContextHolder.getContext().setAuthentication(authentication);
+				if (!request.getRequestURI().contains("/hello")) {
+					Authentication authentication = service.getAuthentication(request);
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				}
 				filterChain.doFilter(request, response);
 			} catch (PlatformException e) {
 				response.setHeader("Content-Type", "application/json;charset=UTF-8");

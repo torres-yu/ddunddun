@@ -14,71 +14,11 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class EmployeeVo {
 
-    private Long cmpId;
+    private Long seq;
 
-    private Long empId;
+    private String userId;
 
-    private Long deptId;
+    private String pass;
 
-    private Long userId;
-
-    private String dutyCodeId;
-
-    private String name;
-
-    private String accountId;
-
-    private LocalTime workStartTime;
-
-    private LocalTime workEndTime;
-
-    private Long typeCodeId;
-
-    private String typeCode;
-
-    private String email;
-
-    private String mobileTelephoneNumber;
-
-    private String empStatus;
-
-    private String officeLocation;
-
-    private Long groupNo;
-
-    private String profileImageUrl;
-
-    private LocalDate groupApplyDate;
-
-    private Long groupApplyEmpNo;
-
-    private Long settingSeq;
-
-    private LocalDate joinDate;
-
-    private LocalDate retirementDate;
-
-    private LocalDate layoffDate;
-
-    private LocalDate reinstatementDate;
-
-    private Long layOffReasonCodeId;
-
-    private LocalDate layoffFromDate;
-
-    private LocalDate layoffToDate;
-
-    private LocalDate leaderIssuedDate;
-
-    private LocalDate leaderReleaseDate;
-
-    private LocalDate traineeEndDate;
-
-    private YesOrNoEnum useServiceYn;
-
-    private String localeCode;
-
-    private LocalDateTime renewalAt;
-
-    private String conversationId;
+    private String userName;
 }
