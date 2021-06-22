@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import io.torres.ddunddun.exception.PlatformException;
 import io.torres.ddunddun.result.LoResultResponse;
 import io.torres.ddunddun.security.TokenAuthenticationService;
+import io.torres.ddunddun.util.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,12 +24,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final TokenAuthenticationService service;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
 			try {
-				if (!request.getRequestURI().contains("/hello")) {
-					Authentication authentication = service.getAuthentication(request);
+				if (false) {
+					Authentication authentication = service.getAuthentication(request, response);
+					if(authentication==null) response.sendRedirect(CommonUtils.getUrl(request));
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				}
 				filterChain.doFilter(request, response);

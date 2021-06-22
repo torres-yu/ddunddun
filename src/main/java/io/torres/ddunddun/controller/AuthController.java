@@ -20,7 +20,7 @@ public class AuthController {
     private AuthService authService;
 
     @GetMapping("/login")
-    public void oauth2Login(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+    public void oauth2Login(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
         authService.loginProcessing(request, response, authentication);
     }

@@ -1,4 +1,4 @@
-package io.torres.ddunddun.entity;
+package io.torres.ddunddun.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

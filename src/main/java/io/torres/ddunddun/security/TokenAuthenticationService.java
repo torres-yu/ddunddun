@@ -7,6 +7,7 @@ import io.torres.ddunddun.entity.Employee;
 import io.torres.ddunddun.exception.EmptyDataException;
 import io.torres.ddunddun.repository.EmployeeRepository;
 import io.torres.ddunddun.service.RefreshTokenService;
+import io.torres.ddunddun.util.CommonUtils;
 import io.torres.ddunddun.vo.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +83,7 @@ public class TokenAuthenticationService {
 		response.setHeader("refreshToken",refreshToken);
 	}
 
-	public Authentication getAuthentication(HttpServletRequest request) {
+	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = tokenProvider.getToken(request, jwtHeaderString);
 		Claims claims = tokenProvider.parseJwt(token);
 		if (claims != null) {
@@ -98,7 +99,7 @@ public class TokenAuthenticationService {
 				return new UsernamePasswordAuthenticationToken(null, null);
 			}
 		} else {
-			return new UsernamePasswordAuthenticationToken(null, null);
+			return null;
 		}
 	}
 }
