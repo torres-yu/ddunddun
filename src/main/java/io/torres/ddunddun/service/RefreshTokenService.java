@@ -24,7 +24,7 @@ public class RefreshTokenService {
      */
     @Transactional(readOnly = true)
     public String getRefreshToken(User user) {
-        RefreshToken refreshToken = refreshTokenRepository.findById(user.getEmpId())
+        RefreshToken refreshToken = refreshTokenRepository.findById(user.getId())
                 .orElseThrow(() -> new EmptyDataException("Not found RefreshToken"));
 
         return refreshToken.getRefreshToken();
@@ -38,8 +38,7 @@ public class RefreshTokenService {
     @Transactional
     public void save(User user, String refreshToken) {
         RefreshToken refreshTokenEntity = new RefreshToken();
-        refreshTokenEntity.setEmpId(user.getEmpId());
-        refreshTokenEntity.setCmpId(user.getCmpId());
+        refreshTokenEntity.setId(user.getId());
         refreshTokenEntity.setRefreshToken(refreshToken);
 
         refreshTokenRepository.save(refreshTokenEntity);
@@ -52,8 +51,7 @@ public class RefreshTokenService {
     @Transactional
     public void remove(User user) {
         RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setEmpId(user.getEmpId());
-        refreshToken.setCmpId(user.getCmpId());
+        refreshToken.setId(user.getId());
         refreshTokenRepository.delete(refreshToken);
     }
 }

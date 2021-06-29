@@ -19,7 +19,7 @@ public class AuthService {
 
         String url = CommonUtils.getUrl(request);
         try {
-            tokenAuthenticationService.addAuthentication(request, response, url, true);
+            tokenAuthenticationService.addAuthentication(response, url, true);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,43 +1,34 @@
 package io.torres.ddunddun.security.filter;
 
-import com.google.gson.Gson;
-import io.torres.ddunddun.exception.PlatformException;
-import io.torres.ddunddun.result.LoResultResponse;
-import io.torres.ddunddun.security.TokenAuthenticationService;
-import io.torres.ddunddun.util.CommonUtils;
-import lombok.RequiredArgsConstructor;
+import io.torres.ddunddun.security.JwtTokenProvider;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@RequiredArgsConstructor
-@Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+@AllArgsConstructor
+public class JwtAuthenticationFilter extends GenericFilterBean {
 
-	private final TokenAuthenticationService service;
+	private JwtTokenProvider jwtTokenProvider;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-			try {
-				if (false) {
-					Authentication authentication = service.getAuthentication(request, response);
-					if(authentication==null) response.sendRedirect(CommonUtils.getUrl(request));
-					SecurityContextHolder.getContext().setAuthentication(authentication);
-				}
-				filterChain.doFilter(request, response);
-			} catch (PlatformException e) {
-				response.setHeader("Content-Type", "application/json;charset=UTF-8");
-				response.setStatus(e.getHttpStatus().value());
-				Gson gson = new Gson();
-				response.getWriter().println(gson.toJson(new LoResultResponse<>(e.getHttpStatus().value(), e.getCode(), e.getMessage(), "")));
-			}
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		// 헤더에서 JWT 를 받아옵니다.
+		String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+		// 유효한 토큰인지 확인합니다.
+		if (token != null && jwtTokenProvider.validateToken(token)) {
+			// 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
+			Authentication authentication = jwtTokenProvider.getAuthentication(token);
+			// SecurityContext 에 Authentication 객체를 저장합니다.
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
+		chain.doFilter(request, response);
 	}
 }

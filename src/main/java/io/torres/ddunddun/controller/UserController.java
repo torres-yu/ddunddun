@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/read")
-public class ReadController {
+@RequestMapping(value = "/user")
+public class UserController {
 
     @Autowired
     private ReadService readService;
 
     @GetMapping("")
-    public Response read() {
+    public Response user() {
 
         return new ResponseBuilder()
                 .add("data", readService.getEmployee())

@@ -2,12 +2,12 @@ package io.torres.ddunddun.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
 import io.torres.ddunddun.converter.UserConverter;
 import io.torres.ddunddun.entity.Employee;
 import io.torres.ddunddun.exception.EmptyDataException;
 import io.torres.ddunddun.repository.EmployeeRepository;
 import io.torres.ddunddun.service.RefreshTokenService;
-import io.torres.ddunddun.util.CommonUtils;
 import io.torres.ddunddun.vo.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class TokenAuthenticationService {
 	private String jwtHeaderString;
 
 	private final AuthorityProvider authorityProvider;
-	private final TokenProvider tokenProvider;
+	private final JwtTokenProvider jwtTokenProvider;
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	private final UserConverter userConverter;
@@ -43,15 +43,21 @@ public class TokenAuthenticationService {
 
 	private final long empId = 327L;
 
-
-	public void addAuthentication(HttpServletRequest request, HttpServletResponse response, String url, boolean isRedirect) throws IOException {
+	/**
+	 * 토큰 생성
+	 * @param response
+	 * @param url
+	 * @param isRedirect
+	 * @throws IOException
+	 */
+	public void addAuthentication(HttpServletResponse response, String url, boolean isRedirect) throws IOException {
 
 			try {
 				Employee employee = employeeRepository.findById(empId).get();
 				User user = userConverter.converts(employee);
 
-				String accessToken = tokenProvider.issueToken(user, "Access");
-				String refreshToken = tokenProvider.issueToken(user, "Refresh");
+				String accessToken = jwtTokenProvider.createToken(user, "Access");
+				String refreshToken = jwtTokenProvider.createToken(user, "Refresh");
 				refreshTokenService.save(user, refreshToken);
 
 				if (isRedirect) {
@@ -71,27 +77,40 @@ public class TokenAuthenticationService {
 
 	}
 
+	/**
+	 * 토큰 생성
+	 * @param response
+	 * @param userId
+	 */
 	public void setTokenResponse(HttpServletResponse response, Long userId){
 		Employee employeeEntity = employeeRepository.findByUserId(userId);
 		User user = userConverter.converts(employeeEntity);
 
-		String accessToken = tokenProvider.issueToken(user, "Access");
-		String refreshToken = tokenProvider.issueToken(user, "Refresh");
+		String accessToken = jwtTokenProvider.createToken(user, "Access");
+		String refreshToken = jwtTokenProvider.createToken(user, "Refresh");
 		refreshTokenService.save(user, refreshToken);
 
 		response.setHeader("accessToken",accessToken);
 		response.setHeader("refreshToken",refreshToken);
 	}
 
+	/**
+	 * jwt가 유효한 토큰인지 체크
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
 	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String token = tokenProvider.getToken(request, jwtHeaderString);
-		Claims claims = tokenProvider.parseJwt(token);
+		String token = jwtTokenProvider.getToken(request, jwtHeaderString);
+		Claims claims = jwtTokenProvider.parseJwt(token);
 		if (claims != null) {
 			try {
 				String userJson = claims.get("user").toString();
 				User user = objectMapper.readValue(userJson, User.class);
 				Set<GrantedAuthority> authoritySet = authorityProvider.getAuthoritySet(user);
-				AuthenticationTokenImpl auth = new AuthenticationTokenImpl(Long.toString(user.getEmpId()), authoritySet);
+				//권한 부여
+				AuthenticationTokenImpl auth = new AuthenticationTokenImpl(Long.toString(user.getId()), authoritySet);
 				auth.setAuthenticated(true);
 				auth.setDetails(user);
 				return auth;

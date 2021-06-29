@@ -7,16 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User implements Serializable {
-    private Long cmpId;
-    private Long empId;
-    private Long deptId;
-    private Authority authority;
-    private String accountId;
-    private String localeCode;
+    private Long seq;
+    private String emaiId;
+    private String password;
+    private String username;
+    private List<String> roles;
 }

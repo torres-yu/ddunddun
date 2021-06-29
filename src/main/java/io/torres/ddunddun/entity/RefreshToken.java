@@ -10,9 +10,7 @@ import javax.persistence.IdClass;
 @RedisHash(value = "jwt", timeToLive = 86400) // 1 일 - 60 * 60 * 24
 public class RefreshToken {
 	@Id
-	private Long empId;
-
-	private Long cmpId;
+	private Long id;
 
 	private String refreshToken;
 }

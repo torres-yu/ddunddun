@@ -4,7 +4,6 @@ import io.torres.ddunddun.code.Role;
 import io.torres.ddunddun.entity.Member;
 import io.torres.ddunddun.repository.MemberRepository;
 import io.torres.ddunddun.util.VoEntityConverter;
-import io.torres.ddunddun.vo.MemberVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,8 +20,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MemberService implements UserDetailsService {
+public class MemberService {
 
+    /*
     @Autowired
     private MemberRepository memberRepository;
 
@@ -56,6 +56,9 @@ public class MemberService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
         }
 
+        //
+
         return new User(member.getUserName(), member.getPassword(), authorities);
     }
+    */
 }
